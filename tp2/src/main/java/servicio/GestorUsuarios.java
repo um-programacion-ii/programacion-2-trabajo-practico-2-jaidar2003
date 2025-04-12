@@ -1,4 +1,6 @@
-package modelo;
+package servicio;
+
+import modelo.Usuario;
 
 import java.util.HashMap;
 //HashMap es una implementación de la interfaz Map que almacena los elementos en pares clave-valor.

@@ -1,4 +1,4 @@
-package modelo;
+package recurso;
 
 public class Revista extends RecursoBase {
     private int numeroEdicion;

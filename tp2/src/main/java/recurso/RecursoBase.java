@@ -1,4 +1,6 @@
-package modelo;
+package recurso;
+
+import modelo.EstadoRecurso;
 
 /**
  * Clase abstracta base para todos los recursos digitales.

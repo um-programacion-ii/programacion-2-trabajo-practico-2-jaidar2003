@@ -1,4 +1,4 @@
-package modelo;
+package recurso;
 
 import modelo.EstadoRecurso; // ⬅️ ¡IMPORTANTE!
 
