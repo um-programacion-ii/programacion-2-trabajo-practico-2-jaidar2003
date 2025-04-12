@@ -1,17 +1,17 @@
 package recurso;
 
-public class Audiolibro extends RecursoBase {
-    private int duracion; // en minutos
+import interfaz.Prestable;
+import interfaz.Renovable;
+import interfaz.IRecursoDigital;
+import interfaz.Accesible;
+import modelo.EstadoRecurso;
+
+public class Audiolibro extends RecursoBase implements Prestable, Renovable, IRecursoDigital, Accesible {
     private String narrador;
 
-    public Audiolibro(String id, String titulo, int duracion, String narrador) {
+    public Audiolibro(String id, String titulo, String narrador) {
         super(id, titulo);
-        this.duracion = duracion;
         this.narrador = narrador;
-    }
-
-    public int getDuracion() {
-        return duracion;
     }
 
     public String getNarrador() {
@@ -19,7 +19,37 @@ public class Audiolibro extends RecursoBase {
     }
 
     @Override
+    public void accederEnLinea() {
+        System.out.println("🔊 Accediendo en línea al audiolibro: " + getTitulo());
+    }
+
+    @Override
+    public void descargar() {
+        System.out.println("⬇️ Descargando el audiolibro: " + getTitulo());
+    }
+
+    @Override
+    public void renovar() {
+        System.out.println("♻️ Renovación exitosa del audiolibro: " + getTitulo());
+    }
+
+    @Override
+    public void prestar() {
+
+    }
+
+    @Override
+    public void devolver() {
+
+    }
+
+    @Override
+    public boolean estaPrestado() {
+        return getEstado() == EstadoRecurso.PRESTADO;
+    }
+
+    @Override
     public String toString() {
-        return super.toString() + " | Audiolibro - Narrador: " + narrador + ", Duración: " + duracion + " min";
+        return super.toString() + " | Audiolibro - Narrador: " + narrador;
     }
 }

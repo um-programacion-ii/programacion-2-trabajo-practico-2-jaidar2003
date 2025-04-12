@@ -1,12 +1,14 @@
 package recurso;
 
+import interfaz.IRecursoDigital;
 import modelo.EstadoRecurso;
 
 /**
- * Clase abstracta base para todos los recursos digitales.
+ * Clase abstracta que implementa IRecursoDigital.
+ * Sirve como base para recursos concretos como Libro, Revista, etc.
  */
-public abstract class RecursoBase implements RecursoDigital {
-    private final String id;
+public abstract class RecursoBase implements IRecursoDigital {
+    private String id;
     private String titulo;
     private EstadoRecurso estado;
 
@@ -14,6 +16,10 @@ public abstract class RecursoBase implements RecursoDigital {
         this.id = id;
         this.titulo = titulo;
         this.estado = EstadoRecurso.DISPONIBLE;
+    }
+
+    public String getTitulo() {
+        return titulo;
     }
 
     @Override
@@ -29,14 +35,6 @@ public abstract class RecursoBase implements RecursoDigital {
     @Override
     public void actualizarEstado(EstadoRecurso nuevoEstado) {
         this.estado = nuevoEstado;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
     }
 
     @Override

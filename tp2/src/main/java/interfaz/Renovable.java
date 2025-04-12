@@ -2,5 +2,5 @@
 package interfaz;
 
 public interface Renovable {
-    boolean renovar();
+    void renovar();
 }
