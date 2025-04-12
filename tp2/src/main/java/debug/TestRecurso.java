@@ -1,32 +1,46 @@
 package debug;
 
-import modelo.Usuario;
-import servicio.GestorUsuarios;
+import interfaz.Prestable;
+import interfaz.Renovable;
+import recurso.Libro;
+import recurso.Revista;
 
 public class TestRecurso {
     public static void main(String[] args) {
-        // Crear gestor
-        GestorUsuarios gestor = new GestorUsuarios();
+        // Crear un libro y una revista
+        Libro libro = new Libro("L1", "El Principito", "Antoine de Saint-Exupéry", "978-0156012195");
+        Revista revista = new Revista("R1", "National Geographic", 202);
 
-        // Registrar usuarios
-        Usuario u1 = new Usuario("1", "Juanma", "juanma@mail.com");
-        Usuario u2 = new Usuario("2", "Laura", "laura@mail.com");
+        // Mostrar estado inicial
+        System.out.println(libro);
+        System.out.println("¿Está prestado el libro? " + libro.estaPrestado());
 
-        gestor.registrarUsuario(u1);
-        gestor.registrarUsuario(u2);
+        System.out.println(revista);
+        System.out.println("¿Está prestada la revista? " + revista.estaPrestado());
 
-        // Listar usuarios
-        System.out.println("📋 Listado de usuarios:");
-        gestor.listarUsuarios();
+        // Prestar ambos recursos
+        libro.prestar();
+        revista.prestar();
 
-        // Buscar usuario por ID
-        System.out.println("\n🔍 Buscar usuario con ID '1':");
-        Usuario encontrado = gestor.buscarPorId("1");
-        System.out.println(encontrado);
+        System.out.println("\n📦 Después del préstamo:");
+        System.out.println(libro);
+        System.out.println("¿Está prestado el libro? " + libro.estaPrestado());
 
-        // Buscar uno inexistente
-        System.out.println("\n🔍 Buscar usuario con ID '99':");
-        Usuario noExiste = gestor.buscarPorId("99");
-        System.out.println(noExiste != null ? noExiste : "No existe ese usuario.");
+        System.out.println(revista);
+        System.out.println("¿Está prestada la revista? " + revista.estaPrestado());
+
+        // Renovar el libro
+        libro.renovar();
+
+        // Devolver ambos
+        libro.devolver();
+        revista.devolver();
+
+        System.out.println("\n📦 Después de la devolución:");
+        System.out.println(libro);
+        System.out.println("¿Está prestado el libro? " + libro.estaPrestado());
+
+        System.out.println(revista);
+        System.out.println("¿Está prestada la revista? " + revista.estaPrestado());
     }
 }
