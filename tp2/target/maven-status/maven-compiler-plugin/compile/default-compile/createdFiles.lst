@@ -1,0 +1,11 @@
+recurso/RecursoDigital.class
+modelo/EstadoRecurso.class
+recurso/Revista.class
+debug/TestIntegrador.class
+ui/Consola.class
+recurso/Libro.class
+debug/TestRecurso.class
+servicio/GestorUsuarios.class
+modelo/Usuario.class
+recurso/RecursoBase.class
+recurso/Audiolibro.class

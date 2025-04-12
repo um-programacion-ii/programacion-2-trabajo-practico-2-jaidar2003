@@ -1,4 +1,4 @@
-package modelo;
+package recurso;
 
 public class Libro extends RecursoBase {
     private String autor;

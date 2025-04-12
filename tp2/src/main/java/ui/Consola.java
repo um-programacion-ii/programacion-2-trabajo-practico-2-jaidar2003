@@ -1,4 +1,4 @@
-package modelo;
+package ui;
 
 import java.util.Scanner;
 

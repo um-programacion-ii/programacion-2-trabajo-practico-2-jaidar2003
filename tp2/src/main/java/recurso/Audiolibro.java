@@ -1,4 +1,4 @@
-package modelo;
+package recurso;
 
 public class Audiolibro extends RecursoBase {
     private int duracion; // en minutos
