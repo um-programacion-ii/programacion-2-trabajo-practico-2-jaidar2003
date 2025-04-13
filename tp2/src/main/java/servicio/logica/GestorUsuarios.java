@@ -1,4 +1,4 @@
-package servicio;
+package servicio.logica;
 
 import modelo.Usuario;
 

@@ -1,4 +1,4 @@
-package debug;
+package test;
 
 import interfaz.IRecursoDigital;
 import recurso.Libro;
