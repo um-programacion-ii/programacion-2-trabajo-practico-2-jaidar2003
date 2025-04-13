@@ -1,13 +1,13 @@
 package recurso;
 
-import interfaz.IRecursoDigital;
+import interfaz.interfazRecursoDigital;
 import modelo.EstadoRecurso;
 
 /**
  * Clase abstracta que implementa IRecursoDigital.
  * Sirve como base para recursos concretos como Libro, Revista, etc.
  */
-public abstract class RecursoBase implements IRecursoDigital {
+public abstract class RecursoBase implements interfazRecursoDigital {
     private String id;
     private String titulo;
     private EstadoRecurso estado;
