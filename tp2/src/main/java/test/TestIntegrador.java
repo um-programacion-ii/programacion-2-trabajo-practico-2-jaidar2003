@@ -6,6 +6,7 @@ import recurso.Libro;
 import recurso.Revista;
 import servicio.logica.GestorRecursos;
 import servicio.logica.GestorUsuarios;
+import servicio.notificacion.ServicioNotificacionesEmail;
 
 public class TestIntegrador {
     public static void main(String[] args) {
@@ -13,7 +14,11 @@ public class TestIntegrador {
 
         // Crear gestores
         GestorUsuarios gestorUsuarios = new GestorUsuarios();
-        GestorRecursos gestorRecursos = new GestorRecursos();
+        //    GestorRecursos gestorRecursos = new GestorRecursos();
+        GestorRecursos gestorRecursos = new GestorRecursos(new ServicioNotificacionesEmail());
+    // O para probar SMS:
+    // GestorRecursos gestorRecursos = new GestorRecursos(new ServicioNotificacionesSMS());
+
 
         // Registrar usuarios
         System.out.println("👤 Registro de Usuario 1");

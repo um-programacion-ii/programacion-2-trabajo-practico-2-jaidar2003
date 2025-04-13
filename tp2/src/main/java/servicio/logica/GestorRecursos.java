@@ -9,6 +9,11 @@ import java.util.List;
 
 public class GestorRecursos {
     private final List<RecursoBase> recursos = new ArrayList<>();
+    private final ServicioNotificaciones servicioNotificaciones;
+
+    public GestorRecursos(ServicioNotificaciones servicioNotificaciones) {
+        this.servicioNotificaciones = servicioNotificaciones;
+    }
 
     public void registrarRecurso(RecursoBase recurso) {
         recursos.add(recurso);
@@ -28,6 +33,7 @@ public class GestorRecursos {
         RecursoBase recurso = buscarPorId(id);
         if (recurso instanceof Prestable prestable) {
             prestable.prestar();
+            servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido prestado.");
             System.out.println("✅ Recurso prestado.");
         } else {
             System.out.println("❌ El recurso no se puede prestar o no existe.");
@@ -38,6 +44,7 @@ public class GestorRecursos {
         RecursoBase recurso = buscarPorId(id);
         if (recurso instanceof Prestable prestable) {
             prestable.devolver();
+            servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido devuelto.");
             System.out.println("✅ Recurso devuelto.");
         } else {
             System.out.println("❌ El recurso no se puede devolver o no existe.");
@@ -48,6 +55,7 @@ public class GestorRecursos {
         RecursoBase recurso = buscarPorId(id);
         if (recurso instanceof Renovable renovable) {
             renovable.renovar();
+            servicioNotificaciones.enviar("🔄 El recurso " + recurso.getTitulo() + " ha sido renovado.");
         } else {
             System.out.println("❌ El recurso no es renovable o no existe.");
         }
