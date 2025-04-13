@@ -4,13 +4,16 @@ import modelo.Usuario;
 import recurso.*;
 import servicio.logica.GestorRecursos;
 import servicio.logica.GestorUsuarios;
-
+import servicio.notificacion.ServicioNotificacionesEmail;
 import java.util.Scanner;
 
 public class MenuConsola {
     private static final Scanner scanner = new Scanner(System.in);
     private static final GestorUsuarios gestorUsuarios = new GestorUsuarios();
-    private static final GestorRecursos gestorRecursos = new GestorRecursos();
+    private static final GestorRecursos gestorRecursos = new GestorRecursos(new ServicioNotificacionesEmail());
+    // Para probar SMS, cambiá a:
+    // private static final GestorRecursos gestorRecursos = new GestorRecursos(new ServicioNotificacionesSMS());
+
 
     public static void main(String[] args) {
         int opcion;

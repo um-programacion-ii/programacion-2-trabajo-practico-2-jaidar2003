@@ -25,6 +25,12 @@ public class TestMain {
         TestNotificacion.main(args);
         System.out.println("✅ TestNotificacion ejecutado.\n");
 
+        TestNotificacionesEmail.main(args);
+        System.out.println("✅ TestNotificacionesEmail ejecutado.\n");
+
+        TestNotificacionesSMS.main(args);
+        System.out.println("✅ TestNotificacionesSMS ejecutado.\n");
+
         TestIntegrador.main(args);
         System.out.println("✅ TestIntegrador ejecutado.\n");
 
