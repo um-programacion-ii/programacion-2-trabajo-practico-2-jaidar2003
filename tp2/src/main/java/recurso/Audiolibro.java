@@ -2,11 +2,11 @@ package recurso;
 
 import interfaz.Prestable;
 import interfaz.Renovable;
-import interfaz.IRecursoDigital;
+import interfaz.interfazRecursoDigital;
 import interfaz.Accesible;
 import modelo.EstadoRecurso;
 
-public class Audiolibro extends RecursoBase implements Prestable, Renovable, IRecursoDigital, Accesible {
+public class Audiolibro extends RecursoBase implements Prestable, Renovable, interfazRecursoDigital, Accesible {
     private String narrador;
 
     public Audiolibro(String id, String titulo, String narrador) {

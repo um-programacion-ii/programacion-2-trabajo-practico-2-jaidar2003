@@ -1,21 +1,19 @@
 package servicio.logica;
 
 import interfaz.*;
-import modelo.EstadoRecurso;
-import recurso.RecursoBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GestorRecursos {
-    private final List<RecursoBase> recursos = new ArrayList<>();
+    private final List<interfazRecursoDigital> recursos = new ArrayList<>();
     private final ServicioNotificaciones servicioNotificaciones;
 
     public GestorRecursos(ServicioNotificaciones servicioNotificaciones) {
         this.servicioNotificaciones = servicioNotificaciones;
     }
 
-    public void registrarRecurso(RecursoBase recurso) {
+    public void registrarRecurso(interfazRecursoDigital recurso) {
         recursos.add(recurso);
     }
 
@@ -24,13 +22,13 @@ public class GestorRecursos {
             System.out.println("📭 No hay recursos registrados.");
             return;
         }
-        for (RecursoBase r : recursos) {
+        for (interfazRecursoDigital r : recursos) {
             System.out.println(r);
         }
     }
 
     public void prestar(String id) {
-        RecursoBase recurso = buscarPorId(id);
+        interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Prestable prestable) {
             prestable.prestar();
             servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido prestado.");
@@ -41,7 +39,7 @@ public class GestorRecursos {
     }
 
     public void devolver(String id) {
-        RecursoBase recurso = buscarPorId(id);
+        interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Prestable prestable) {
             prestable.devolver();
             servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido devuelto.");
@@ -52,7 +50,7 @@ public class GestorRecursos {
     }
 
     public void renovar(String id) {
-        RecursoBase recurso = buscarPorId(id);
+        interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Renovable renovable) {
             renovable.renovar();
             servicioNotificaciones.enviar("🔄 El recurso " + recurso.getTitulo() + " ha sido renovado.");
@@ -62,7 +60,7 @@ public class GestorRecursos {
     }
 
     public void accederOnline(String id) {
-        RecursoBase recurso = buscarPorId(id);
+        interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Accesible accesible) {
             accesible.accederEnLinea();
         } else {
@@ -71,7 +69,7 @@ public class GestorRecursos {
     }
 
     public void descargar(String id) {
-        RecursoBase recurso = buscarPorId(id);
+        interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Accesible accesible) {
             accesible.descargar();
         } else {
@@ -79,8 +77,8 @@ public class GestorRecursos {
         }
     }
 
-    private RecursoBase buscarPorId(String id) {
-        for (RecursoBase r : recursos) {
+    private interfazRecursoDigital buscarPorId(String id) {
+        for (interfazRecursoDigital r : recursos) {
             if (r.getIdentificador().equals(id)) {
                 return r;
             }
