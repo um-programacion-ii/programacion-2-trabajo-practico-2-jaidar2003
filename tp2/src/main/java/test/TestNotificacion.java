@@ -1,4 +1,4 @@
-package debug;
+package test;
 
 import servicio.notificacion.NotificacionConsola;
 import servicio.notificacion.ServicioNotificaciones;
