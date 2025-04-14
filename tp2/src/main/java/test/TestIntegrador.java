@@ -1,5 +1,6 @@
 package test;
 
+import modelo.CategoriaRecurso;
 import modelo.Usuario;
 import recurso.Audiolibro;
 import recurso.Libro;
@@ -28,9 +29,9 @@ public class TestIntegrador {
         gestorUsuarios.registrarUsuario(new Usuario("U2", "Pedro", "pedro@mail.com"));
 
         // Registrar recursos
-        gestorRecursos.registrarRecurso(new Libro("L1", "El Principito", "Antoine", "978-0156012195"));
-        gestorRecursos.registrarRecurso(new Revista("R1", "National Geographic", 202));
-        gestorRecursos.registrarRecurso(new Audiolibro("A1", "1984", "Carlos Pérez"));
+        gestorRecursos.registrarRecurso(new Libro("L1", "El Principito", "Antoine", "978-0156012195", CategoriaRecurso.ARTE));
+        gestorRecursos.registrarRecurso(new Revista("R1", "National Geographic", 202, CategoriaRecurso.ARTE));
+        gestorRecursos.registrarRecurso(new Audiolibro("A1", "1984", "Carlos Pérez",  CategoriaRecurso.ARTE));
 
         // Prestar y devolver recursos
         gestorRecursos.prestar("L1");

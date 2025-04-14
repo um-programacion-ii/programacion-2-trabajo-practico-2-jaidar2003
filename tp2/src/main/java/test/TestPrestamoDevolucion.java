@@ -1,5 +1,6 @@
 package test;
 
+import modelo.CategoriaRecurso;
 import recurso.Libro;
 import servicio.logica.GestorRecursos;
 import servicio.notificacion.ServicioNotificacionesEmail;
@@ -14,7 +15,7 @@ public class TestPrestamoDevolucion {
     // o, si querés probar con SMS:
     // GestorRecursos gestor = new GestorRecursos(new ServicioNotificacionesSMS());
 
-        Libro libro = new Libro("L2", "Cien Años de Soledad", "Gabriel García Márquez", "ISBN456");
+        Libro libro = new Libro("L2", "Cien Años de Soledad", "Gabriel García Márquez", "ISBN456", CategoriaRecurso.ARTE);
 
         gestor.registrarRecurso(libro);
         gestor.prestar("L2");

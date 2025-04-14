@@ -1,8 +1,10 @@
 package servicio.logica;
 
 import interfaz.*;
+import modelo.CategoriaRecurso;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class GestorRecursos {
@@ -84,5 +86,35 @@ public class GestorRecursos {
             }
         }
         return null;
+    }
+
+    // 🔎 Búsqueda por título con Streams
+    public List<interfazRecursoDigital> buscarPorTitulo(String titulo) {
+        return recursos.stream()
+                .filter(r -> r.getTitulo().toLowerCase().contains(titulo.toLowerCase()))
+                .toList();
+    }
+
+    // 🗂️ Filtro por categoría
+    public List<interfazRecursoDigital> filtrarPorCategoria(CategoriaRecurso categoria) {
+        return recursos.stream()
+                .filter(r -> r.getCategoria().equals(categoria))
+                .toList();
+    }
+
+    // 🔤 Ordenar por título (ascendente)
+    public List<interfazRecursoDigital> ordenarPorTituloAscendente() {
+        return recursos.stream()
+                .sorted(Comparator.comparing(interfazRecursoDigital::getTitulo))
+                .toList();
+    }
+
+    // 📋 Mostrar lista de recursos
+    public void mostrarLista(List<interfazRecursoDigital> lista) {
+        if (lista.isEmpty()) {
+            System.out.println("📭 No se encontraron recursos.");
+            return;
+        }
+        lista.forEach(System.out::println);
     }
 }

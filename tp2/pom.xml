@@ -17,12 +17,27 @@
 
     <build>
         <plugins>
+            <!-- Habilitar compilación con preview features -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
                     <release>21</release>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+
+            <!-- Habilitar ejecución con preview features -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <mainClass>app.MenuConsola</mainClass>
+                    <commandlineArgs>--enable-preview</commandlineArgs>
                 </configuration>
             </plugin>
         </plugins>
