@@ -2,17 +2,16 @@ package recurso;
 
 import interfaz.Prestable;
 import modelo.EstadoRecurso;
+import modelo.CategoriaRecurso;
 
 public class Revista extends RecursoBase implements Prestable {
     private int numeroEdicion;
     private boolean prestado;
 
-    public Revista(String id, String titulo, int numeroEdicion) {
-        super(id, titulo);
+    public Revista(String id, String titulo, int numeroEdicion, CategoriaRecurso categoria) {
+        super(id, titulo, categoria);
         this.numeroEdicion = numeroEdicion;
-        this.prestado = false;
     }
-
     public int getNumeroEdicion() {
         return numeroEdicion;
     }

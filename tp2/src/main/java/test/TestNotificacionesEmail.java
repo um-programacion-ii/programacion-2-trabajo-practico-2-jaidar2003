@@ -4,6 +4,7 @@ import interfaz.ServicioNotificaciones;
 import recurso.*;
 import servicio.logica.GestorRecursos;
 import servicio.notificacion.ServicioNotificacionesEmail;
+import modelo.CategoriaRecurso;
 
 public class TestNotificacionesEmail {
     public static void main(String[] args) {
@@ -16,8 +17,8 @@ public class TestNotificacionesEmail {
         GestorRecursos gestor = new GestorRecursos(servicioEmail);
 
         // ✅ Registrar recursos
-        gestor.registrarRecurso(new Libro("L2", "Rayuela", "Julio Cortázar", "978-8437603794"));
-        gestor.registrarRecurso(new Audiolibro("A2", "El Hobbit", "Laura Sánchez"));
+        gestor.registrarRecurso(new Libro("L2", "Rayuela", "Julio Cortázar", "978-8437603794", CategoriaRecurso.LITERATURA));
+        gestor.registrarRecurso(new Audiolibro("A2", "El Hobbit", "Laura Sánchez", CategoriaRecurso.FICCION));
 
         // ✅ Prestar, renovar y devolver
         gestor.prestar("L2");

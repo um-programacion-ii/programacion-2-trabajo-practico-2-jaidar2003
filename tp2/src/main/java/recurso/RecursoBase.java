@@ -1,44 +1,48 @@
 package recurso;
 
-import interfaz.interfazRecursoDigital;
 import modelo.EstadoRecurso;
+import modelo.CategoriaRecurso;
+import interfaz.interfazRecursoDigital;
 
-/**
- * Clase abstracta que implementa IRecursoDigital.
- * Sirve como base para recursos concretos como Libro, Revista, etc.
- */
 public abstract class RecursoBase implements interfazRecursoDigital {
     private String id;
     private String titulo;
     private EstadoRecurso estado;
+    private CategoriaRecurso categoria;
 
-    public RecursoBase(String id, String titulo) {
+    public RecursoBase(String id, String titulo, CategoriaRecurso categoria) {
         this.id = id;
         this.titulo = titulo;
         this.estado = EstadoRecurso.DISPONIBLE;
+        this.categoria = categoria;
+    }
+
+    public String getIdentificador() {
+        return id;
     }
 
     public String getTitulo() {
         return titulo;
     }
 
-    @Override
-    public String getIdentificador() {
-        return id;
-    }
-
-    @Override
     public EstadoRecurso getEstado() {
         return estado;
     }
 
-    @Override
-    public void actualizarEstado(EstadoRecurso nuevoEstado) {
-        this.estado = nuevoEstado;
+    public void actualizarEstado(EstadoRecurso estado) {
+        this.estado = estado;
+    }
+
+    public CategoriaRecurso getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaRecurso categoria) {
+        this.categoria = categoria;
     }
 
     @Override
     public String toString() {
-        return "Recurso: " + titulo + " [" + estado + "]";
+        return "Recurso: " + titulo + " [" + estado + "] - Categoría: " + categoria;
     }
 }

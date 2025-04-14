@@ -1,13 +1,14 @@
 package test;
 
 import interfaz.interfazRecursoDigital;
+import modelo.CategoriaRecurso;
 import recurso.Libro;
 import recurso.Revista;
 
 public class TestRecurso {
     public static void main(String[] args) {
-        Libro libro = new Libro("L1", "El Principito", "Antoine de Saint-Exupéry", "978-0156012195");
-        Revista revista = new Revista("R1", "National Geographic", 202);
+        Libro libro = new Libro("L1", "El Principito", "Antoine de Saint-Exupéry", "978-0156012195", CategoriaRecurso.FICCION);
+        Revista revista = new Revista("R1", "National Geographic", 202, CategoriaRecurso.CIENCIA);
 
         System.out.println(libro);
         System.out.println("¿Está prestado el libro? " + libro.estaPrestado());
@@ -37,7 +38,7 @@ public class TestRecurso {
         System.out.println(revista);
         System.out.println("¿Está prestada la revista? " + revista.estaPrestado());
 
-        interfazRecursoDigital recurso = new Libro("123", "El Principito", "Antoine", "978-1234567890");
+        interfazRecursoDigital recurso = new Libro("123", "El Principito", "Antoine", "978-1234567890", CategoriaRecurso.FICCION);
         System.out.println("🔎 Identificador de recurso: " + recurso.getIdentificador());
     }
 }

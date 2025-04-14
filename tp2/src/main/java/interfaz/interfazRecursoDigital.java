@@ -1,13 +1,14 @@
+// interfazRecursoDigital.java
 package interfaz;
 
+import modelo.CategoriaRecurso;
 import modelo.EstadoRecurso;
 
-/**
- * Contrato principal para todos los recursos digitales.
- */
 public interface interfazRecursoDigital {
     String getIdentificador();
+    String getTitulo();
     EstadoRecurso getEstado();
     void actualizarEstado(EstadoRecurso estado);
-    String getTitulo();
+
+    CategoriaRecurso getCategoria();
 }

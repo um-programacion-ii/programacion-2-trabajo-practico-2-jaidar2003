@@ -6,6 +6,7 @@ import servicio.logica.GestorRecursos;
 import servicio.logica.GestorUsuarios;
 import servicio.notificacion.ServicioNotificacionesEmail;
 import java.util.Scanner;
+import modelo.CategoriaRecurso;
 
 public class MenuConsola {
     private static final Scanner scanner = new Scanner(System.in);
@@ -36,7 +37,6 @@ public class MenuConsola {
                 case 0 -> System.out.println("👋 ¡Hasta luego!");
                 default -> System.out.println("❌ Opción inválida.");
             }
-
         } while (opcion != 0);
     }
 
@@ -44,16 +44,16 @@ public class MenuConsola {
         System.out.println("""
             📚 Sistema de Gestión de Biblioteca
 
-            1️⃣ Registrar usuario
-            2️⃣ Listar usuarios
-            3️⃣ Registrar recurso
-            4️⃣ Listar recursos
-            5️⃣ Prestar recurso
-            6️⃣ Devolver recurso
-            7️⃣ Renovar recurso
-            8️⃣ Acceder en línea a recurso digital
-            9️⃣ Descargar recurso digital
-            0️⃣ Salir
+            1️⃣ 1) Registrar usuario
+            2️⃣ 2) Listar usuarios
+            3️⃣ 3) Registrar recurso
+            4️⃣ 4) Listar recursos
+            5️⃣ 5) Prestar recurso
+            6️⃣ 6) Devolver recurso
+            7️⃣ 7) Renovar recurso
+            8️⃣ 8) Acceder en línea a recurso digital
+            9️⃣ 9) Descargar recurso digital
+            0️⃣ 0) Salir
             """);
         System.out.print("Seleccione una opción: ");
     }
@@ -82,28 +82,40 @@ public class MenuConsola {
         System.out.print("Título: ");
         String titulo = scanner.nextLine();
 
+        System.out.print("Categoría (FICCION, TECNICO, HISTORIA, CIENCIA): ");
+        String categoriaStr = scanner.nextLine().toUpperCase();
+
+        CategoriaRecurso categoria;
+        try {
+            categoria = CategoriaRecurso.valueOf(categoriaStr);
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ Categoría inválida. Recurso no registrado.");
+            return;
+        }
+
         switch (tipo) {
             case "libro" -> {
                 System.out.print("Autor: ");
                 String autor = scanner.nextLine();
                 System.out.print("ISBN: ");
                 String isbn = scanner.nextLine();
-                gestorRecursos.registrarRecurso(new Libro(id, titulo, autor, isbn));
+                gestorRecursos.registrarRecurso(new Libro(id, titulo, autor, isbn, categoria));
             }
             case "revista" -> {
                 System.out.print("Número de edición: ");
                 int edicion = scanner.nextInt();
-                scanner.nextLine();
-                gestorRecursos.registrarRecurso(new Revista(id, titulo, edicion));
+                scanner.nextLine(); // limpiar buffer
+                gestorRecursos.registrarRecurso(new Revista(id, titulo, edicion, categoria));
             }
             case "audiolibro" -> {
                 System.out.print("Narrador: ");
                 String narrador = scanner.nextLine();
-                gestorRecursos.registrarRecurso(new Audiolibro(id, titulo, narrador));
+                gestorRecursos.registrarRecurso(new Audiolibro(id, titulo, narrador, categoria));
             }
             default -> System.out.println("❌ Tipo de recurso no válido.");
         }
     }
+
 
     private static void listarRecursos() {
         gestorRecursos.listarRecursos();

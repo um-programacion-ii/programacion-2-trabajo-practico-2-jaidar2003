@@ -2,16 +2,15 @@ package recurso;
 
 import interfaz.Prestable;
 import interfaz.Renovable;
+import modelo.CategoriaRecurso;
+import modelo.EstadoRecurso;
 
-/**
- * Recurso concreto: Libro. Implementa interfaces Prestable y Renovable.
- */
 public class Libro extends RecursoBase implements Prestable, Renovable {
     private String autor;
     private String isbn;
 
-    public Libro(String id, String titulo, String autor, String isbn) {
-        super(id, titulo);
+    public Libro(String id, String titulo, String autor, String isbn, CategoriaRecurso categoria) {
+        super(id, titulo, categoria);
         this.autor = autor;
         this.isbn = isbn;
     }
@@ -26,17 +25,17 @@ public class Libro extends RecursoBase implements Prestable, Renovable {
 
     @Override
     public boolean estaPrestado() {
-        return getEstado().equals(modelo.EstadoRecurso.PRESTADO);
+        return getEstado().equals(EstadoRecurso.PRESTADO);
     }
 
     @Override
     public void prestar() {
-        actualizarEstado(modelo.EstadoRecurso.PRESTADO);
+        actualizarEstado(EstadoRecurso.PRESTADO);
     }
 
     @Override
     public void devolver() {
-        actualizarEstado(modelo.EstadoRecurso.DISPONIBLE);
+        actualizarEstado(EstadoRecurso.DISPONIBLE);
     }
 
     @Override
