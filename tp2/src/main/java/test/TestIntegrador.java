@@ -8,6 +8,7 @@ import recurso.Revista;
 import servicio.logica.GestorRecursos;
 import servicio.logica.GestorUsuarios;
 import servicio.notificacion.ServicioNotificacionesEmail;
+import excepciones.RecursoNoDisponibleException;
 
 public class TestIntegrador {
     public static void main(String[] args) {
@@ -26,11 +27,15 @@ public class TestIntegrador {
         gestorRecursos.registrarRecurso(new Revista("R1", "National Geographic", 202, CategoriaRecurso.CIENCIA));
         gestorRecursos.registrarRecurso(new Audiolibro("A1", "1984", "Carlos Pérez", CategoriaRecurso.HISTORIA));
 
-        gestorRecursos.prestar("L1");
-        gestorRecursos.devolver("L1");
+        try {
+            gestorRecursos.prestar("L1");
+            gestorRecursos.devolver("L1");
 
-        gestorRecursos.accederOnline("A1");
-        gestorRecursos.descargar("A1");
+            gestorRecursos.accederOnline("A1");
+            gestorRecursos.descargar("A1");
+        } catch (RecursoNoDisponibleException e) {
+            System.out.println("❌ Error durante una operación de recursos: " + e.getMessage());
+        }
 
         System.out.println("✅ TestIntegrador ejecutado.\n");
     }
