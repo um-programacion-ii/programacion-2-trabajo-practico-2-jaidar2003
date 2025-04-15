@@ -1,6 +1,5 @@
 package test;
 
-import interfaz.interfazRecursoDigital;
 import modelo.CategoriaRecurso;
 import recurso.Libro;
 import recurso.Revista;
@@ -37,8 +36,6 @@ public class TestRecurso {
 
         System.out.println(revista);
         System.out.println("¿Está prestada la revista? " + revista.estaPrestado());
-
-        interfazRecursoDigital recurso = new Libro("123", "El Principito", "Antoine", "978-1234567890", CategoriaRecurso.FICCION);
-        System.out.println("🔎 Identificador de recurso: " + recurso.getIdentificador());
     }
 }
+

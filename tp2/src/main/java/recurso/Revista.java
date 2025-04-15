@@ -1,40 +1,34 @@
 package recurso;
 
 import interfaz.Prestable;
-import modelo.EstadoRecurso;
 import modelo.CategoriaRecurso;
+import modelo.EstadoRecurso;
 
 public class Revista extends RecursoBase implements Prestable {
     private int numeroEdicion;
-    private boolean prestado;
 
     public Revista(String id, String titulo, int numeroEdicion, CategoriaRecurso categoria) {
         super(id, titulo, categoria);
         this.numeroEdicion = numeroEdicion;
     }
+
     public int getNumeroEdicion() {
         return numeroEdicion;
     }
 
     @Override
+    public boolean estaPrestado() {
+        return getEstado() == EstadoRecurso.PRESTADO;
+    }
+
+    @Override
     public void prestar() {
-        if (!prestado) {
-            prestado = true;
-            actualizarEstado(EstadoRecurso.PRESTADO);
-        }
+        actualizarEstado(EstadoRecurso.PRESTADO);
     }
 
     @Override
     public void devolver() {
-        if (prestado) {
-            prestado = false;
-            actualizarEstado(EstadoRecurso.DISPONIBLE);
-        }
-    }
-
-    @Override
-    public boolean estaPrestado() {
-        return prestado;
+        actualizarEstado(EstadoRecurso.DISPONIBLE);
     }
 
     @Override

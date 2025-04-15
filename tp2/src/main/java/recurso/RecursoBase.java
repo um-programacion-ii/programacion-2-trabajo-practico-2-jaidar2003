@@ -1,8 +1,8 @@
 package recurso;
 
+import interfaz.interfazRecursoDigital;
 import modelo.EstadoRecurso;
 import modelo.CategoriaRecurso;
-import interfaz.interfazRecursoDigital;
 
 public abstract class RecursoBase implements interfazRecursoDigital {
     private String id;
@@ -17,22 +17,27 @@ public abstract class RecursoBase implements interfazRecursoDigital {
         this.categoria = categoria;
     }
 
+    @Override
     public String getIdentificador() {
         return id;
     }
 
-    public String getTitulo() {
-        return titulo;
-    }
-
+    @Override
     public EstadoRecurso getEstado() {
         return estado;
     }
 
-    public void actualizarEstado(EstadoRecurso estado) {
-        this.estado = estado;
+    @Override
+    public void actualizarEstado(EstadoRecurso nuevoEstado) {
+        this.estado = nuevoEstado;
     }
 
+    @Override
+    public String getTitulo() {
+        return titulo;
+    }
+
+    @Override
     public CategoriaRecurso getCategoria() {
         return categoria;
     }
@@ -43,6 +48,6 @@ public abstract class RecursoBase implements interfazRecursoDigital {
 
     @Override
     public String toString() {
-        return "Recurso: " + titulo + " [" + estado + "] - Categoría: " + categoria;
+        return "Recurso: " + titulo + " [" + estado + "]" + " | Categoría: " + categoria;
     }
 }
