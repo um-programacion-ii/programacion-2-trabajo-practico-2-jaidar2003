@@ -1,7 +1,8 @@
 package servicio.logica;
 
 import interfaz.*;
-import modelo.CategoriaRecurso;
+import modelo.*;
+import excepciones.RecursoNoDisponibleException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,63 +30,61 @@ public class GestorRecursos {
         }
     }
 
-    public void prestar(String id) {
+    public void prestar(String id) throws RecursoNoDisponibleException {
         interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Prestable prestable) {
             prestable.prestar();
             servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido prestado.");
             System.out.println("✅ Recurso prestado.");
         } else {
-            System.out.println("❌ El recurso no se puede prestar o no existe.");
+            throw new RecursoNoDisponibleException("❌ El recurso no está disponible o no se puede prestar.");
         }
     }
 
-    public void devolver(String id) {
+    public void devolver(String id) throws RecursoNoDisponibleException {
         interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Prestable prestable) {
             prestable.devolver();
             servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido devuelto.");
             System.out.println("✅ Recurso devuelto.");
         } else {
-            System.out.println("❌ El recurso no se puede devolver o no existe.");
+            throw new RecursoNoDisponibleException("❌ El recurso no se puede devolver o no existe.");
         }
     }
 
-    public void renovar(String id) {
+    public void renovar(String id) throws RecursoNoDisponibleException {
         interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Renovable renovable) {
             renovable.renovar();
             servicioNotificaciones.enviar("🔄 El recurso " + recurso.getTitulo() + " ha sido renovado.");
         } else {
-            System.out.println("❌ El recurso no es renovable o no existe.");
+            throw new RecursoNoDisponibleException("❌ El recurso no es renovable o no existe.");
         }
     }
 
-    public void accederOnline(String id) {
+    public void accederOnline(String id) throws RecursoNoDisponibleException {
         interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Accesible accesible) {
             accesible.accederEnLinea();
         } else {
-            System.out.println("❌ El recurso no permite acceso en línea o no existe.");
+            throw new RecursoNoDisponibleException("❌ El recurso no permite acceso en línea o no existe.");
         }
     }
 
-    public void descargar(String id) {
+    public void descargar(String id) throws RecursoNoDisponibleException {
         interfazRecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Accesible accesible) {
             accesible.descargar();
         } else {
-            System.out.println("❌ El recurso no se puede descargar o no existe.");
+            throw new RecursoNoDisponibleException("❌ El recurso no se puede descargar o no existe.");
         }
     }
 
-    private interfazRecursoDigital buscarPorId(String id) {
-        for (interfazRecursoDigital r : recursos) {
-            if (r.getIdentificador().equals(id)) {
-                return r;
-            }
-        }
-        return null;
+    private interfazRecursoDigital buscarPorId(String id) throws RecursoNoDisponibleException {
+        return recursos.stream()
+                .filter(r -> r.getIdentificador().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new RecursoNoDisponibleException("❌ No se encontró un recurso con ID: " + id));
     }
 
     // 🔎 Búsqueda por título con Streams

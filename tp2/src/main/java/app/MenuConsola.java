@@ -1,20 +1,19 @@
 package app;
 
 import modelo.Usuario;
+import modelo.CategoriaRecurso;
 import recurso.*;
 import servicio.logica.GestorRecursos;
 import servicio.logica.GestorUsuarios;
 import servicio.notificacion.ServicioNotificacionesEmail;
+import excepciones.RecursoNoDisponibleException;
+
 import java.util.Scanner;
-import modelo.CategoriaRecurso;
 
 public class MenuConsola {
     private static final Scanner scanner = new Scanner(System.in);
     private static final GestorUsuarios gestorUsuarios = new GestorUsuarios();
     private static final GestorRecursos gestorRecursos = new GestorRecursos(new ServicioNotificacionesEmail());
-    // Para probar SMS, cambiá a:
-    // private static final GestorRecursos gestorRecursos = new GestorRecursos(new ServicioNotificacionesSMS());
-
 
     public static void main(String[] args) {
         int opcion;
@@ -125,32 +124,53 @@ public class MenuConsola {
     private static void prestarRecurso() {
         System.out.print("ID del recurso: ");
         String id = scanner.nextLine();
-        gestorRecursos.prestar(id);
+        try {
+            gestorRecursos.prestar(id);
+        } catch (RecursoNoDisponibleException e) {
+            System.out.println("⚠️ " + e.getMessage());
+        }
     }
 
     private static void devolverRecurso() {
         System.out.print("ID del recurso: ");
         String id = scanner.nextLine();
-        gestorRecursos.devolver(id);
+        try {
+            gestorRecursos.devolver(id);
+        } catch (RecursoNoDisponibleException e) {
+            System.out.println("⚠️ " + e.getMessage());
+        }
     }
 
     private static void renovarRecurso() {
         System.out.print("ID del recurso: ");
         String id = scanner.nextLine();
-        gestorRecursos.renovar(id);
+        try {
+            gestorRecursos.renovar(id);
+        } catch (RecursoNoDisponibleException e) {
+            System.out.println("⚠️ " + e.getMessage());
+        }
     }
 
     private static void accederOnline() {
         System.out.print("ID del recurso digital: ");
         String id = scanner.nextLine();
-        gestorRecursos.accederOnline(id);
+        try {
+            gestorRecursos.accederOnline(id);
+        } catch (RecursoNoDisponibleException e) {
+            System.out.println("⚠️ " + e.getMessage());
+        }
     }
 
     private static void descargarRecurso() {
         System.out.print("ID del recurso digital: ");
         String id = scanner.nextLine();
-        gestorRecursos.descargar(id);
+        try {
+            gestorRecursos.descargar(id);
+        } catch (RecursoNoDisponibleException e) {
+            System.out.println("⚠️ " + e.getMessage());
+        }
     }
+
     private static void buscarPorCategoria() {
         System.out.println("Categorías disponibles:");
         for (CategoriaRecurso c : CategoriaRecurso.values()) {
@@ -168,5 +188,4 @@ public class MenuConsola {
             System.out.println("❌ Categoría inválida.");
         }
     }
-
 }
