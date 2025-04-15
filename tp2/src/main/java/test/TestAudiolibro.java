@@ -5,7 +5,7 @@ import recurso.Audiolibro;
 
 public class TestAudiolibro {
     public static void main(String[] args) {
-        Audiolibro a = new Audiolibro("A1", "1984", "Carlos Pérez", CategoriaRecurso.ARTE);
+        Audiolibro a = new Audiolibro("A1", "1984", "Carlos Pérez", CategoriaRecurso.FICCION);
 
         System.out.println(a);
         a.accederEnLinea();

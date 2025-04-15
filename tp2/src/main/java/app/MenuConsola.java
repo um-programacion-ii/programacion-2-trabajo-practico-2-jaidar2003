@@ -34,6 +34,7 @@ public class MenuConsola {
                 case 7 -> renovarRecurso();
                 case 8 -> accederOnline();
                 case 9 -> descargarRecurso();
+                case 10 -> buscarPorCategoria();
                 case 0 -> System.out.println("👋 ¡Hasta luego!");
                 default -> System.out.println("❌ Opción inválida.");
             }
@@ -44,16 +45,17 @@ public class MenuConsola {
         System.out.println("""
             📚 Sistema de Gestión de Biblioteca
 
-            1️⃣ 1) Registrar usuario
-            2️⃣ 2) Listar usuarios
-            3️⃣ 3) Registrar recurso
-            4️⃣ 4) Listar recursos
-            5️⃣ 5) Prestar recurso
-            6️⃣ 6) Devolver recurso
-            7️⃣ 7) Renovar recurso
-            8️⃣ 8) Acceder en línea a recurso digital
-            9️⃣ 9) Descargar recurso digital
-            0️⃣ 0) Salir
+            1) Registrar usuario
+            2) Listar usuarios
+            3) Registrar recurso
+            4) Listar recursos
+            5) Prestar recurso
+            6) Devolver recurso
+            7) Renovar recurso
+            8) Acceder en línea a recurso digital
+            9) Descargar recurso digital
+            10) Buscar recursos por categoría 
+            0) Salir
             """);
         System.out.print("Seleccione una opción: ");
     }
@@ -116,7 +118,6 @@ public class MenuConsola {
         }
     }
 
-
     private static void listarRecursos() {
         gestorRecursos.listarRecursos();
     }
@@ -150,4 +151,22 @@ public class MenuConsola {
         String id = scanner.nextLine();
         gestorRecursos.descargar(id);
     }
+    private static void buscarPorCategoria() {
+        System.out.println("Categorías disponibles:");
+        for (CategoriaRecurso c : CategoriaRecurso.values()) {
+            System.out.println("📁 " + c);
+        }
+
+        System.out.print("Ingrese categoría a buscar: ");
+        String input = scanner.nextLine().toUpperCase();
+
+        try {
+            CategoriaRecurso categoria = CategoriaRecurso.valueOf(input);
+            var resultados = gestorRecursos.filtrarPorCategoria(categoria);
+            gestorRecursos.mostrarLista(resultados);
+        } catch (IllegalArgumentException e) {
+            System.out.println("❌ Categoría inválida.");
+        }
+    }
+
 }
