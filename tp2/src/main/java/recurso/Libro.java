@@ -29,6 +29,10 @@ public class Libro extends RecursoBase implements Prestable, Renovable {
     }
 
     @Override
+    public boolean estaDisponible() {return getEstado() == EstadoRecurso.DISPONIBLE;}
+
+
+    @Override
     public void prestar() {
         actualizarEstado(EstadoRecurso.PRESTADO);
     }

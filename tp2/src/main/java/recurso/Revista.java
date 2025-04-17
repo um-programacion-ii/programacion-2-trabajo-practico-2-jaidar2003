@@ -22,6 +22,10 @@ public class Revista extends RecursoBase implements Prestable {
     }
 
     @Override
+    public boolean estaDisponible() {return getEstado() == EstadoRecurso.DISPONIBLE;}
+
+
+    @Override
     public void prestar() {
         actualizarEstado(EstadoRecurso.PRESTADO);
     }
