@@ -24,6 +24,9 @@ public class Audiolibro extends RecursoBase implements Accesible, Prestable, Ren
     }
 
     @Override
+    public boolean estaDisponible() {return getEstado() == EstadoRecurso.DISPONIBLE;}
+
+    @Override
     public void prestar() {
         actualizarEstado(EstadoRecurso.PRESTADO);
     }

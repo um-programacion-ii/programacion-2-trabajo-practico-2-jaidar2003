@@ -34,6 +34,9 @@ public class TestMain {
         TestIntegrador.main(args);
         System.out.println("✅ TestIntegrador ejecutado.\n");
 
+        TestPrestamoDevolucion.main(args);
+        System.out.println("✅ TestPrestamoDevolucion ejecutado.\n");
+
         System.out.println("🎉 Todos los tests fueron ejecutados exitosamente.");
     }
 }
