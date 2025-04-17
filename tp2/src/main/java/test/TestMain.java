@@ -1,7 +1,8 @@
 package test;
 
 public class TestMain {
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws InterruptedException {
         System.out.println("🧪 Ejecutando todos los tests del sistema...\n");
 
         TestUsuarios.main(args);
@@ -36,6 +37,9 @@ public class TestMain {
 
         TestPrestamoDevolucion.main(args);
         System.out.println("✅ TestPrestamoDevolucion ejecutado.\n");
+
+        TestReservas.main(args);
+        System.out.println("✅ TestReservas ejecutado.\n");
 
         System.out.println("🎉 Todos los tests fueron ejecutados exitosamente.");
     }
