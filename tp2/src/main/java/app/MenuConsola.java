@@ -12,8 +12,9 @@ import java.util.Scanner;
 
 public class MenuConsola {
     private static final Scanner scanner = new Scanner(System.in);
+    private static final ServicioNotificacionesEmail servicioNotificaciones = new ServicioNotificacionesEmail();
     private static final GestorUsuarios gestorUsuarios = new GestorUsuarios();
-    private static final GestorRecursos gestorRecursos = new GestorRecursos(new ServicioNotificacionesEmail());
+    private static final GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
 
     public static void main(String[] args) {
         int opcion;
@@ -34,7 +35,10 @@ public class MenuConsola {
                 case 8 -> accederOnline();
                 case 9 -> descargarRecurso();
                 case 10 -> buscarPorCategoria();
-                case 0 -> System.out.println("👋 ¡Hasta luego!");
+                case 0 -> {
+                    System.out.println("👋 ¡Hasta luego!");
+                    servicioNotificaciones.cerrar();  // Cerramos el ExecutorService
+                }
                 default -> System.out.println("❌ Opción inválida.");
             }
         } while (opcion != 0);
@@ -105,7 +109,7 @@ public class MenuConsola {
             case "revista" -> {
                 System.out.print("Número de edición: ");
                 int edicion = scanner.nextInt();
-                scanner.nextLine(); // limpiar buffer
+                scanner.nextLine();
                 gestorRecursos.registrarRecurso(new Revista(id, titulo, edicion, categoria));
             }
             case "audiolibro" -> {

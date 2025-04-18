@@ -41,6 +41,9 @@ public class TestMain {
         TestReservas.main(args);
         System.out.println("✅ TestReservas ejecutado.\n");
 
+        TestAlertasVencimiento.main(args);
+        System.out.println("✅ TestAlertasVencimiento ejecutado.\n");
+
         System.out.println("🎉 Todos los tests fueron ejecutados exitosamente.");
     }
 }
