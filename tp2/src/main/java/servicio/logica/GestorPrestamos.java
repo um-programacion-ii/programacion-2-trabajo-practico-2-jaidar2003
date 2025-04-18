@@ -3,6 +3,7 @@ package servicio.logica;
 import excepciones.RecursoNoDisponibleException;
 import modelo.Prestamo;
 import modelo.Usuario;
+import modelo.AlertaVencimiento;
 import interfaz.Prestable;
 import interfaz.interfazRecursoDigital;
 
@@ -34,5 +35,26 @@ public class GestorPrestamos {
 
     public List<Prestamo> getPrestamos() {
         return prestamos;
+    }
+
+    public void verificarVencimientos() {
+        System.out.println("🔍 Verificando vencimientos de préstamos...\n");
+
+        boolean hayAlertas = false;
+
+        for (Prestamo prestamo : prestamos) {
+            AlertaVencimiento alerta = new AlertaVencimiento(prestamo);
+            switch (alerta.getUrgencia()) {
+                case WARNING, CRITICAL -> {
+                    System.out.println(alerta.getMensaje());
+                    hayAlertas = true;
+                }
+                default -> {} // No mostrar INFO
+            }
+        }
+
+        if (!hayAlertas) {
+            System.out.println("✅ No hay préstamos próximos a vencer.");
+        }
     }
 }
