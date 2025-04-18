@@ -44,6 +44,9 @@ public class TestMain {
         TestAlertasVencimiento.main(args);
         System.out.println("✅ TestAlertasVencimiento ejecutado.\n");
 
+        TestConcurrenciaPrestamos.main(args);
+        System.out.println("✅ TestConcurrenciaPrestamos ejecutado.\n");
+
         System.out.println("🎉 Todos los tests fueron ejecutados exitosamente.");
     }
 }

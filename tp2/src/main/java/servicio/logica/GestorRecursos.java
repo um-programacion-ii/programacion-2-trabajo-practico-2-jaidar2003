@@ -31,15 +31,22 @@ public class GestorRecursos {
     }
 
     public void prestar(String id) throws RecursoNoDisponibleException {
-        interfazRecursoDigital recurso = buscarPorId(id);
-        if (recurso instanceof Prestable prestable) {
-            prestable.prestar();
-            servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido prestado.");
-            System.out.println("✅ Recurso prestado.");
-        } else {
-            throw new RecursoNoDisponibleException("❌ El recurso no está disponible o no se puede prestar.");
+        synchronized (this) { // 🔐 Bloque sincronizado
+            interfazRecursoDigital recurso = buscarPorId(id);
+            if (recurso instanceof Prestable prestable) {
+                if (prestable.estaDisponible()) {
+                    prestable.prestar();
+                    servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido prestado.");
+                    System.out.println("✅ Recurso prestado.");
+                } else {
+                    throw new RecursoNoDisponibleException("El recurso ya está prestado.");
+                }
+            } else {
+                throw new RecursoNoDisponibleException("El recurso no es prestable o no existe.");
+            }
         }
     }
+
 
     public void devolver(String id) throws RecursoNoDisponibleException {
         interfazRecursoDigital recurso = buscarPorId(id);
