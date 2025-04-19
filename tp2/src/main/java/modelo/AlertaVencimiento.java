@@ -29,10 +29,11 @@ public class AlertaVencimiento {
     private String generarMensaje() {
         String base = "📅 El recurso \"" + prestamo.getRecurso().getTitulo() + "\" prestado por "
                 + prestamo.getUsuario().getNombre();
+        String renovacionInfo = " - Para renovar, use la opción 'R'";
 
         return switch (urgencia) {
-            case CRITICAL -> "⚠️ [CRÍTICO] " + base + " vence HOY (" + prestamo.getFechaFin() + ")";
-            case WARNING -> "🔔 [AVISO] " + base + " vence mañana (" + prestamo.getFechaFin() + ")";
+            case CRITICAL -> "⚠️ [CRÍTICO] " + base + " vence HOY (" + prestamo.getFechaFin() + ")" + renovacionInfo;
+            case WARNING -> "🔔 [AVISO] " + base + " vence mañana (" + prestamo.getFechaFin() + ")" + renovacionInfo;
             case INFO -> "✅ " + base + " no está por vencer.";
         };
     }

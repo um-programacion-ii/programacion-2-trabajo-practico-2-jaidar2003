@@ -19,6 +19,7 @@ public class TestMain {
             TestUsuarios.main(args);
             TestRecurso.main(args);
             TestPrestamoDevolucion.main(args);
+            TestPrestamo.main(args);
             TestDigitales.main(args);
             TestAudiolibro.main(args);
             TestVisualizacion.main(args);
