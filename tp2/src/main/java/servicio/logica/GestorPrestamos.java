@@ -5,7 +5,7 @@ import modelo.Prestamo;
 import modelo.Usuario;
 import modelo.AlertaVencimiento;
 import interfaz.Prestable;
-import interfaz.interfazRecursoDigital;
+import interfaz.RecursoDigital;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 public class GestorPrestamos {
     private final List<Prestamo> prestamos = new ArrayList<>();
 
-    public void registrarPrestamo(Usuario usuario, interfazRecursoDigital recurso) throws RecursoNoDisponibleException {
+    public void registrarPrestamo(Usuario usuario, RecursoDigital recurso) throws RecursoNoDisponibleException {
         if (recurso instanceof Prestable prestable && prestable.estaDisponible()) {
             prestable.prestar(); // Cambiar el estado a PRESTADO
             Prestamo nuevoPrestamo = new Prestamo(usuario, recurso, LocalDate.now(), LocalDate.now().plusDays(7));

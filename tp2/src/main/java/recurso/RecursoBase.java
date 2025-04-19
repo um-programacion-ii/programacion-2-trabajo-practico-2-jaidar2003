@@ -1,10 +1,10 @@
 package recurso;
 
-import interfaz.interfazRecursoDigital;
+import interfaz.RecursoDigital;
 import modelo.EstadoRecurso;
 import modelo.CategoriaRecurso;
 
-public abstract class RecursoBase implements interfazRecursoDigital {
+public abstract class RecursoBase implements RecursoDigital {
     private String id;
     private String titulo;
     private EstadoRecurso estado;

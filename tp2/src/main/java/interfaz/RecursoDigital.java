@@ -4,7 +4,7 @@ package interfaz;
 import modelo.CategoriaRecurso;
 import modelo.EstadoRecurso;
 
-public interface interfazRecursoDigital {
+public interface RecursoDigital {
     String getIdentificador();
     String getTitulo();
     EstadoRecurso getEstado();
