@@ -31,6 +31,7 @@ public class TestMain {
             TestConcurrenciaPrestamos.main(args);
             TestConcurrenciaReservas.main(args);
             TestAlertasVencimiento.main(args);
+            TestAlertasDisponibilidad.main(args);
             TestReportes.main(args);
 
         } finally {
