@@ -1,4 +1,11 @@
 package modelo;
 
-public class EstadoRecurso {
+public enum EstadoRecurso {
+    DISPONIBLE,
+    PRESTADO,
+    RESERVADO,
+    VENCIDO,
+    INFO,
+    WARNING,
+    ERROR
 }

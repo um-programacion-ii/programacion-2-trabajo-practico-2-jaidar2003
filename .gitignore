@@ -30,3 +30,6 @@ replay_pid*
 .classpath
 .project
 .settings/
+
+# Ignorar tests de debug
+src/main/java/debug/Test*.java

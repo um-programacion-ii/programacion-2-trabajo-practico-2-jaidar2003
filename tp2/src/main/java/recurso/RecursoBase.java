@@ -1,17 +1,20 @@
-package modelo;
+package recurso;
 
-/**
- * Clase abstracta base para todos los recursos digitales.
- */
+import interfaz.RecursoDigital;
+import modelo.EstadoRecurso;
+import modelo.CategoriaRecurso;
+
 public abstract class RecursoBase implements RecursoDigital {
-    private final String id;
+    private String id;
     private String titulo;
     private EstadoRecurso estado;
+    private CategoriaRecurso categoria;
 
-    public RecursoBase(String id, String titulo) {
+    public RecursoBase(String id, String titulo, CategoriaRecurso categoria) {
         this.id = id;
         this.titulo = titulo;
         this.estado = EstadoRecurso.DISPONIBLE;
+        this.categoria = categoria;
     }
 
     @Override
@@ -29,16 +32,22 @@ public abstract class RecursoBase implements RecursoDigital {
         this.estado = nuevoEstado;
     }
 
+    @Override
     public String getTitulo() {
         return titulo;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    @Override
+    public CategoriaRecurso getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaRecurso categoria) {
+        this.categoria = categoria;
     }
 
     @Override
     public String toString() {
-        return "Recurso: " + titulo + " [" + estado + "]";
+        return "Recurso: " + titulo + " [" + estado + "]" + " | Categoría: " + categoria;
     }
 }
