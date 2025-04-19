@@ -1,23 +1,21 @@
 package servicio.logica;
 
+import excepciones.RecursoNoDisponibleException;
 import interfaz.*;
 import modelo.*;
-import excepciones.RecursoNoDisponibleException;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class GestorRecursos {
-    private final List<interfazRecursoDigital> recursos = new ArrayList<>();
+    private final Map<String, RecursoDigital> recursos = new HashMap<>();
     private final ServicioNotificaciones servicioNotificaciones;
 
     public GestorRecursos(ServicioNotificaciones servicioNotificaciones) {
         this.servicioNotificaciones = servicioNotificaciones;
     }
 
-    public void registrarRecurso(interfazRecursoDigital recurso) {
-        recursos.add(recurso);
+    public void registrarRecurso(RecursoDigital recurso) {
+        recursos.put(recurso.getIdentificador(), recurso);
     }
 
     public void listarRecursos() {
@@ -25,31 +23,26 @@ public class GestorRecursos {
             System.out.println("📭 No hay recursos registrados.");
             return;
         }
-        for (interfazRecursoDigital r : recursos) {
-            System.out.println(r);
-        }
+        recursos.values().forEach(System.out::println);
     }
 
-    public void prestar(String id) throws RecursoNoDisponibleException {
-        synchronized (this) { // 🔐 Bloque sincronizado
-            interfazRecursoDigital recurso = buscarPorId(id);
-            if (recurso instanceof Prestable prestable) {
-                if (prestable.estaDisponible()) {
-                    prestable.prestar();
-                    servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido prestado.");
-                    System.out.println("✅ Recurso prestado.");
-                } else {
-                    throw new RecursoNoDisponibleException("El recurso ya está prestado.");
-                }
+    public synchronized void prestar(String id) throws RecursoNoDisponibleException {
+        RecursoDigital recurso = buscarPorId(id);
+        if (recurso instanceof Prestable prestable) {
+            if (prestable.estaDisponible()) {
+                prestable.prestar();
+                servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido prestado.");
+                System.out.println("✅ Recurso prestado.");
             } else {
-                throw new RecursoNoDisponibleException("El recurso no es prestable o no existe.");
+                throw new RecursoNoDisponibleException("El recurso ya está prestado.");
             }
+        } else {
+            throw new RecursoNoDisponibleException("El recurso no es prestable o no existe.");
         }
     }
-
 
     public void devolver(String id) throws RecursoNoDisponibleException {
-        interfazRecursoDigital recurso = buscarPorId(id);
+        RecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Prestable prestable) {
             prestable.devolver();
             servicioNotificaciones.enviar("🔔 El recurso " + recurso.getTitulo() + " ha sido devuelto.");
@@ -60,7 +53,7 @@ public class GestorRecursos {
     }
 
     public void renovar(String id) throws RecursoNoDisponibleException {
-        interfazRecursoDigital recurso = buscarPorId(id);
+        RecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Renovable renovable) {
             renovable.renovar();
             servicioNotificaciones.enviar("🔄 El recurso " + recurso.getTitulo() + " ha sido renovado.");
@@ -70,7 +63,7 @@ public class GestorRecursos {
     }
 
     public void accederOnline(String id) throws RecursoNoDisponibleException {
-        interfazRecursoDigital recurso = buscarPorId(id);
+        RecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Accesible accesible) {
             accesible.accederEnLinea();
         } else {
@@ -79,7 +72,7 @@ public class GestorRecursos {
     }
 
     public void descargar(String id) throws RecursoNoDisponibleException {
-        interfazRecursoDigital recurso = buscarPorId(id);
+        RecursoDigital recurso = buscarPorId(id);
         if (recurso instanceof Accesible accesible) {
             accesible.descargar();
         } else {
@@ -87,40 +80,37 @@ public class GestorRecursos {
         }
     }
 
-    private interfazRecursoDigital buscarPorId(String id) throws RecursoNoDisponibleException {
-        return recursos.stream()
-                .filter(r -> r.getIdentificador().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new RecursoNoDisponibleException("❌ No se encontró un recurso con ID: " + id));
+    private RecursoDigital buscarPorId(String id) throws RecursoNoDisponibleException {
+        RecursoDigital recurso = recursos.get(id);
+        if (recurso == null) {
+            throw new RecursoNoDisponibleException("❌ No se encontró un recurso con ID: " + id);
+        }
+        return recurso;
     }
 
-    // 🔎 Búsqueda por título con Streams
-    public List<interfazRecursoDigital> buscarPorTitulo(String titulo) {
-        return recursos.stream()
+    public List<RecursoDigital> buscarPorTitulo(String titulo) {
+        return recursos.values().stream()
                 .filter(r -> r.getTitulo().toLowerCase().contains(titulo.toLowerCase()))
                 .toList();
     }
 
-    // 🗂️ Filtro por categoría
-    public List<interfazRecursoDigital> filtrarPorCategoria(CategoriaRecurso categoria) {
-        return recursos.stream()
+    public List<RecursoDigital> filtrarPorCategoria(CategoriaRecurso categoria) {
+        return recursos.values().stream()
                 .filter(r -> r.getCategoria().equals(categoria))
                 .toList();
     }
 
-    // 🔤 Ordenar por título (ascendente)
-    public List<interfazRecursoDigital> ordenarPorTituloAscendente() {
-        return recursos.stream()
-                .sorted(Comparator.comparing(interfazRecursoDigital::getTitulo))
+    public List<RecursoDigital> ordenarPorTituloAscendente() {
+        return recursos.values().stream()
+                .sorted(Comparator.comparing(RecursoDigital::getTitulo))
                 .toList();
     }
 
-    // 📋 Mostrar lista de recursos
-    public void mostrarLista(List<interfazRecursoDigital> lista) {
+    public void mostrarLista(List<RecursoDigital> lista) {
         if (lista.isEmpty()) {
             System.out.println("📭 No se encontraron recursos.");
-            return;
+        } else {
+            lista.forEach(System.out::println);
         }
-        lista.forEach(System.out::println);
     }
 }

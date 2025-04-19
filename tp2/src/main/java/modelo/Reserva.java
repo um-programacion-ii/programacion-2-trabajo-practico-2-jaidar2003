@@ -1,12 +1,12 @@
 package modelo;
 
-import interfaz.interfazRecursoDigital;
+import interfaz.RecursoDigital;
 
 public class Reserva {
     private final Usuario usuario;
-    private final interfazRecursoDigital recurso;
+    private final RecursoDigital recurso;
 
-    public Reserva(Usuario usuario, interfazRecursoDigital recurso) {
+    public Reserva(Usuario usuario, RecursoDigital recurso) {
         this.usuario = usuario;
         this.recurso = recurso;
     }
@@ -15,7 +15,7 @@ public class Reserva {
         return usuario;
     }
 
-    public interfazRecursoDigital getRecurso() {
+    public RecursoDigital getRecurso() {
         return recurso;
     }
 

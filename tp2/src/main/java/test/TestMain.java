@@ -1,52 +1,42 @@
 package test;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 public class TestMain {
-
     public static void main(String[] args) throws InterruptedException {
-        System.out.println("🧪 Ejecutando todos los tests del sistema...\n");
+        // Guardar salida original
+        PrintStream originalOut = System.out;
 
-        TestUsuarios.main(args);
-        System.out.println("✅ TestUsuarios ejecutado.\n");
+        try {
+            // Silenciar salida estándar
+            System.setOut(new PrintStream(new OutputStream() {
+                @Override
+                public void write(int b) {}
+            }));
 
-        TestRecurso.main(args);
-        System.out.println("✅ TestRecursos ejecutado.\n");
+            // Ejecutar todos los tests
+            TestUsuarios.main(args);
+            TestRecurso.main(args);
+            TestPrestamoDevolucion.main(args);
+            TestDigitales.main(args);
+            TestAudiolibro.main(args);
+            TestVisualizacion.main(args);
+            TestNotificacion.main(args);
+            TestNotificacionesEmail.main(args);
+            TestNotificacionesSMS.main(args);
+            TestIntegrador.main(args);
+            TestReservas.main(args);
+            TestConcurrenciaPrestamos.main(args);
+            TestConcurrenciaReservas.main(args);
+            TestAlertasVencimiento.main(args);
+            TestReportes.main(args);
 
-        TestPrestamoDevolucion.main(args);
-        System.out.println("✅ TestPrestamoDevolucion ejecutado.\n");
+        } finally {
+            // Restaurar salida estándar
+            System.setOut(originalOut);
+        }
 
-        TestDigitales.main(args);
-        System.out.println("✅ TestDigitales ejecutado.\n");
-
-        TestAudiolibro.main(args);
-        System.out.println("✅ TestAudiolibro ejecutado.\n");
-
-        TestVisualizacion.main(args);
-        System.out.println("✅ TestVisualizacion ejecutado.\n");
-
-        TestNotificacion.main(args);
-        System.out.println("✅ TestNotificacion ejecutado.\n");
-
-        TestNotificacionesEmail.main(args);
-        System.out.println("✅ TestNotificacionesEmail ejecutado.\n");
-
-        TestNotificacionesSMS.main(args);
-        System.out.println("✅ TestNotificacionesSMS ejecutado.\n");
-
-        TestIntegrador.main(args);
-        System.out.println("✅ TestIntegrador ejecutado.\n");
-
-        TestPrestamoDevolucion.main(args);
-        System.out.println("✅ TestPrestamoDevolucion ejecutado.\n");
-
-        TestReservas.main(args);
-        System.out.println("✅ TestReservas ejecutado.\n");
-
-        TestAlertasVencimiento.main(args);
-        System.out.println("✅ TestAlertasVencimiento ejecutado.\n");
-
-        TestConcurrenciaPrestamos.main(args);
-        System.out.println("✅ TestConcurrenciaPrestamos ejecutado.\n");
-
-        System.out.println("🎉 Todos los tests fueron ejecutados exitosamente.");
+        System.out.println("✅ Todos los tests fueron ejecutados exitosamente.");
     }
 }

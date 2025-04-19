@@ -1,16 +1,16 @@
 package modelo;
 
-import interfaz.interfazRecursoDigital;
+import interfaz.RecursoDigital;
 
 import java.time.LocalDate;
 
 public class Prestamo {
     private Usuario usuario;
-    private interfazRecursoDigital recurso;
+    private RecursoDigital recurso;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
 
-    public Prestamo(Usuario usuario, interfazRecursoDigital recurso, LocalDate fechaInicio, LocalDate fechaFin) {
+    public Prestamo(Usuario usuario, RecursoDigital recurso, LocalDate fechaInicio, LocalDate fechaFin) {
         this.usuario = usuario;
         this.recurso = recurso;
         this.fechaInicio = fechaInicio;
@@ -21,7 +21,7 @@ public class Prestamo {
         return usuario;
     }
 
-    public interfazRecursoDigital getRecurso() {
+    public RecursoDigital getRecurso() {
         return recurso;
     }
 
