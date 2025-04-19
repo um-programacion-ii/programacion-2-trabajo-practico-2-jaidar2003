@@ -1,6 +1,7 @@
 package modelo;
 
 import interfaz.RecursoDigital;
+import interfaz.Renovable;
 
 import java.time.LocalDate;
 
@@ -15,6 +16,13 @@ public class Prestamo {
         this.recurso = recurso;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+    }
+
+    public void renovar(int dias) {
+        if (recurso instanceof Renovable renovable) {
+            this.fechaFin = this.fechaFin.plusDays(dias);
+            renovable.renovar();
+        }
     }
 
     public Usuario getUsuario() {

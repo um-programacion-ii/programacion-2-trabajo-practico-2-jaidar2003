@@ -27,8 +27,8 @@ public class TestAlertasVencimiento {
         gestor.getPrestamos().add(prestamo1);
         gestor.getPrestamos().add(prestamo2);
 
-        // Verificar alertas
-        gestor.verificarVencimientos();
+        // Verificar alertas (en modo test para evitar interacción con el usuario)
+        gestor.verificarVencimientos(true);
 
         System.out.println("\n✅ TestAlertasVencimiento ejecutado.");
     }
