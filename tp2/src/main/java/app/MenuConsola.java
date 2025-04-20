@@ -7,13 +7,17 @@ import modelo.CategoriaRecurso;
 import recurso.*;
 import servicio.logica.GestorPrestamos;
 import servicio.logica.GestorRecursos;
+import servicio.logica.GestorReportes;
 import servicio.logica.GestorReservas;
 import servicio.logica.GestorUsuarios;
 import servicio.logica.GestorRecordatorios;
 import servicio.notificacion.ServicioNotificacionesEmail;
 import excepciones.RecursoNoDisponibleException;
 
+import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
+import java.util.concurrent.Future;
 
 public class MenuConsola {
     private static final Scanner scanner = new Scanner(System.in);
@@ -23,6 +27,7 @@ public class MenuConsola {
     private static final GestorReservas gestorReservas = new GestorReservas(gestorPrestamos);
     private static final GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
     private static final GestorRecordatorios sistemaRecordatorios = new GestorRecordatorios();
+    private static final GestorReportes gestorReportes = new GestorReportes(gestorPrestamos.getPrestamos());
 
     static {
         // Configurar el servicio de notificaciones para GestorReservas
@@ -54,10 +59,15 @@ public class MenuConsola {
                 case 14 -> configurarPreferenciasNotificacion();
                 case 15 -> verificarVencimientosPrestamos();
                 case 16 -> procesarAlertasDisponibilidad();
+                case 17 -> generarReportesSincronos();
+                case 18 -> generarReportesConcurrentes();
+                case 19 -> verEstadoReportes();
+                case 20 -> verResultadosReportes();
                 case 0 -> {
                     System.out.println("👋 ¡Hasta luego!");
                     servicioNotificaciones.cerrar();  // Cerramos el ExecutorService
                     sistemaRecordatorios.cerrar();    // Cerramos el sistema de recordatorios
+                    gestorReportes.cerrar();          // Cerramos el servicio de reportes
                 }
                 default -> System.out.println("❌ Opción inválida.");
             }
@@ -84,6 +94,13 @@ public class MenuConsola {
             14) Configurar preferencias de notificación
             15) Verificar vencimientos de préstamos
             16) Procesar alertas de disponibilidad
+
+            📊 Reportes:
+            17) Generar reportes (síncrono)
+            18) Generar reportes concurrentes
+            19) Ver estado de reportes
+            20) Ver resultados de reportes
+
             0) Salir
             """);
         System.out.print("Seleccione una opción: ");
@@ -345,5 +362,74 @@ public class MenuConsola {
     private static void procesarAlertasDisponibilidad() {
         System.out.println("🔔 Procesando alertas de disponibilidad...");
         gestorReservas.procesarAlertasDisponibilidad();
+    }
+
+    /**
+     * Genera reportes de forma síncrona.
+     * Utiliza el método mostrarTodosLosReportes() de GestorReportes.
+     */
+    private static void generarReportesSincronos() {
+        System.out.println("📊 Generando reportes de forma síncrona...");
+        gestorReportes.mostrarTodosLosReportes();
+    }
+
+    /**
+     * Genera reportes de forma concurrente.
+     * Utiliza los métodos de generación asíncrona de GestorReportes.
+     */
+    private static void generarReportesConcurrentes() {
+        System.out.println("📊 Generando reportes de forma concurrente...");
+
+        // Generar un ID único para cada reporte
+        String idRecursos = "recursos-" + UUID.randomUUID().toString().substring(0, 8);
+        String idUsuarios = "usuarios-" + UUID.randomUUID().toString().substring(0, 8);
+        String idCategorias = "categorias-" + UUID.randomUUID().toString().substring(0, 8);
+
+        // Generar reportes de forma asíncrona
+        System.out.println("⏳ Iniciando generación de reportes en segundo plano...");
+
+        Future<?> futuroRecursos = gestorReportes.generarReporteRecursosMasPrestadosAsync(idRecursos);
+        Future<?> futuroUsuarios = gestorReportes.generarReporteUsuariosMasActivosAsync(idUsuarios);
+        Future<?> futuroCategorias = gestorReportes.generarReporteEstadisticasPorCategoriaAsync(idCategorias);
+
+        System.out.println("✅ Reportes iniciados con éxito. Puede consultar su estado con la opción 19.");
+        System.out.println("📝 IDs de los reportes:");
+        System.out.println("   - Recursos más prestados: " + idRecursos);
+        System.out.println("   - Usuarios más activos: " + idUsuarios);
+        System.out.println("   - Estadísticas por categoría: " + idCategorias);
+    }
+
+    /**
+     * Muestra el estado actual de los reportes en proceso y finalizados.
+     * Utiliza el método mostrarEstadoReportes() de GestorReportes.
+     */
+    private static void verEstadoReportes() {
+        System.out.println("🔍 Estado de los reportes:");
+        gestorReportes.mostrarEstadoReportes();
+    }
+
+    /**
+     * Permite ver los resultados de un reporte específico.
+     * Utiliza el método obtenerResultadoReporte() de GestorReportes.
+     */
+    private static void verResultadosReportes() {
+        System.out.println("📋 Ver resultados de reportes");
+
+        // Mostrar estado actual de reportes
+        gestorReportes.mostrarEstadoReportes();
+
+        // Solicitar ID del reporte a consultar
+        System.out.print("\nIngrese el ID del reporte que desea ver: ");
+        String reporteId = scanner.nextLine();
+
+        // Obtener y mostrar el resultado
+        String resultado = gestorReportes.obtenerResultadoReporte(reporteId);
+
+        if (resultado != null) {
+            System.out.println("\n📊 Resultado del reporte " + reporteId + ":");
+            System.out.println(resultado);
+        } else {
+            System.out.println("❌ No se encontró un reporte con ese ID o aún no ha finalizado.");
+        }
     }
 }
