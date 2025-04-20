@@ -1,10 +1,15 @@
 package app;
 
+import modelo.PreferenciasNotificacion;
+import modelo.Recordatorio;
 import modelo.Usuario;
 import modelo.CategoriaRecurso;
 import recurso.*;
+import servicio.logica.GestorPrestamos;
 import servicio.logica.GestorRecursos;
+import servicio.logica.GestorReservas;
 import servicio.logica.GestorUsuarios;
+import servicio.logica.GestorRecordatorios;
 import servicio.notificacion.ServicioNotificacionesEmail;
 import excepciones.RecursoNoDisponibleException;
 
@@ -14,7 +19,15 @@ public class MenuConsola {
     private static final Scanner scanner = new Scanner(System.in);
     private static final ServicioNotificacionesEmail servicioNotificaciones = new ServicioNotificacionesEmail();
     private static final GestorUsuarios gestorUsuarios = new GestorUsuarios();
+    private static final GestorPrestamos gestorPrestamos = new GestorPrestamos();
+    private static final GestorReservas gestorReservas = new GestorReservas(gestorPrestamos);
     private static final GestorRecursos gestorRecursos = new GestorRecursos(servicioNotificaciones);
+    private static final GestorRecordatorios sistemaRecordatorios = new GestorRecordatorios();
+
+    static {
+        // Configurar el servicio de notificaciones para GestorReservas
+        gestorReservas.setServicioNotificaciones(new servicio.notificacion.ServicioNotificacionesEmailAdapter(servicioNotificaciones));
+    }
 
     public static void main(String[] args) {
         int opcion;
@@ -35,9 +48,16 @@ public class MenuConsola {
                 case 8 -> accederOnline();
                 case 9 -> descargarRecurso();
                 case 10 -> buscarPorCategoria();
+                case 11 -> crearRecordatorio();
+                case 12 -> verHistorialRecordatorios();
+                case 13 -> verRecordatoriosPorUsuario();
+                case 14 -> configurarPreferenciasNotificacion();
+                case 15 -> verificarVencimientosPrestamos();
+                case 16 -> procesarAlertasDisponibilidad();
                 case 0 -> {
                     System.out.println("👋 ¡Hasta luego!");
                     servicioNotificaciones.cerrar();  // Cerramos el ExecutorService
+                    sistemaRecordatorios.cerrar();    // Cerramos el sistema de recordatorios
                 }
                 default -> System.out.println("❌ Opción inválida.");
             }
@@ -57,7 +77,13 @@ public class MenuConsola {
             7) Renovar recurso
             8) Acceder en línea a recurso digital
             9) Descargar recurso digital
-            10) Buscar recursos por categoría 
+            10) Buscar recursos por categoría
+            11) Crear recordatorio
+            12) Ver historial de recordatorios
+            13) Ver recordatorios por usuario
+            14) Configurar preferencias de notificación
+            15) Verificar vencimientos de préstamos
+            16) Procesar alertas de disponibilidad
             0) Salir
             """);
         System.out.print("Seleccione una opción: ");
@@ -191,5 +217,133 @@ public class MenuConsola {
         } catch (IllegalArgumentException e) {
             System.out.println("❌ Categoría inválida.");
         }
+    }
+
+    private static void crearRecordatorio() {
+        System.out.println("📝 Crear nuevo recordatorio");
+
+        // Seleccionar usuario
+        System.out.println("\nUsuarios disponibles:");
+        gestorUsuarios.listarUsuarios();
+
+        System.out.print("\nIngrese ID del usuario: ");
+        String idUsuario = scanner.nextLine();
+        Usuario usuario = gestorUsuarios.buscarUsuarioPorId(idUsuario);
+
+        if (usuario == null) {
+            System.out.println("❌ Usuario no encontrado.");
+            return;
+        }
+
+        // Ingresar datos del recordatorio
+        System.out.print("Asunto: ");
+        String asunto = scanner.nextLine();
+
+        System.out.print("Mensaje: ");
+        String mensaje = scanner.nextLine();
+
+        System.out.println("Nivel de urgencia (1: INFO, 2: WARNING, 3: ERROR): ");
+        int nivelOpcion = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        Recordatorio.NivelUrgencia nivel;
+        switch (nivelOpcion) {
+            case 1 -> nivel = Recordatorio.NivelUrgencia.INFO;
+            case 2 -> nivel = Recordatorio.NivelUrgencia.WARNING;
+            case 3 -> nivel = Recordatorio.NivelUrgencia.ERROR;
+            default -> {
+                System.out.println("❌ Nivel inválido. Se usará INFO por defecto.");
+                nivel = Recordatorio.NivelUrgencia.INFO;
+            }
+        }
+
+        // Crear recordatorio
+        sistemaRecordatorios.crearRecordatorio(usuario, asunto, mensaje, nivel);
+        System.out.println("✅ Recordatorio creado con éxito.");
+    }
+
+    private static void verHistorialRecordatorios() {
+        System.out.println("📋 Historial de recordatorios");
+        sistemaRecordatorios.mostrarHistorialRecordatorios();
+    }
+
+    private static void verRecordatoriosPorUsuario() {
+        System.out.println("📋 Recordatorios por usuario");
+
+        // Seleccionar usuario
+        System.out.println("\nUsuarios disponibles:");
+        gestorUsuarios.listarUsuarios();
+
+        System.out.print("\nIngrese ID del usuario: ");
+        String idUsuario = scanner.nextLine();
+        Usuario usuario = gestorUsuarios.buscarUsuarioPorId(idUsuario);
+
+        if (usuario == null) {
+            System.out.println("❌ Usuario no encontrado.");
+            return;
+        }
+
+        sistemaRecordatorios.mostrarRecordatoriosUsuario(usuario);
+    }
+
+    private static void configurarPreferenciasNotificacion() {
+        System.out.println("⚙️ Configurar preferencias de notificación");
+
+        // Seleccionar usuario
+        System.out.println("\nUsuarios disponibles:");
+        gestorUsuarios.listarUsuarios();
+
+        System.out.print("\nIngrese ID del usuario: ");
+        String idUsuario = scanner.nextLine();
+        Usuario usuario = gestorUsuarios.buscarUsuarioPorId(idUsuario);
+
+        if (usuario == null) {
+            System.out.println("❌ Usuario no encontrado.");
+            return;
+        }
+
+        System.out.println("Preferencias actuales: " + usuario.getPreferencias());
+
+        // Configurar nuevas preferencias
+        System.out.print("¿Recibir notificaciones por email? (S/N): ");
+        boolean recibirPorEmail = scanner.nextLine().toUpperCase().equals("S");
+
+        System.out.print("¿Recibir notificaciones por consola? (S/N): ");
+        boolean recibirPorConsola = scanner.nextLine().toUpperCase().equals("S");
+
+        System.out.print("¿Recibir notificaciones de nivel INFO? (S/N): ");
+        boolean recibirInfoLevel = scanner.nextLine().toUpperCase().equals("S");
+
+        System.out.print("¿Recibir notificaciones de nivel WARNING? (S/N): ");
+        boolean recibirWarningLevel = scanner.nextLine().toUpperCase().equals("S");
+
+        System.out.print("¿Recibir notificaciones de nivel ERROR? (S/N): ");
+        boolean recibirErrorLevel = scanner.nextLine().toUpperCase().equals("S");
+
+        // Crear y asignar nuevas preferencias
+        PreferenciasNotificacion preferencias = new PreferenciasNotificacion(
+                recibirPorEmail, recibirPorConsola, recibirInfoLevel, recibirWarningLevel, recibirErrorLevel);
+
+        usuario.setPreferencias(preferencias);
+        System.out.println("✅ Preferencias actualizadas con éxito.");
+        System.out.println("Nuevas preferencias: " + usuario.getPreferencias());
+    }
+
+    /**
+     * Verifica los vencimientos de préstamos y permite renovarlos.
+     * Utiliza el método verificarVencimientos() de GestorPrestamos.
+     */
+    private static void verificarVencimientosPrestamos() {
+        System.out.println("🔍 Verificando vencimientos de préstamos...");
+        gestorPrestamos.verificarVencimientos();
+    }
+
+    /**
+     * Procesa las alertas de disponibilidad de recursos reservados.
+     * Utiliza el método procesarAlertasDisponibilidad() de GestorReservas.
+     */
+    private static void procesarAlertasDisponibilidad() {
+        System.out.println("🔔 Procesando alertas de disponibilidad...");
+        gestorReservas.procesarAlertasDisponibilidad();
     }
 }
